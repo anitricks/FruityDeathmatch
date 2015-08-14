@@ -86,6 +86,8 @@ public class Network : Photon.MonoBehaviour
     public void OnJoinedLobby()
     {
         Debug.Log("OnJoinedLobby(). Use a GUI to show existing rooms available in PhotonNetwork.GetRoomList().");
+
+        PhotonNetwork.player.SetTeam(PunTeams.Team.blue);
     }
 
     public void JoinRoom(string roomName, string playerName)
@@ -93,6 +95,7 @@ public class Network : Photon.MonoBehaviour
         PhotonNetwork.playerName = playerName;
         PhotonNetwork.JoinRoom(roomName);
     }
+
     public void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom");
@@ -160,24 +163,26 @@ public class Network : Photon.MonoBehaviour
 
     private void InitLevel()
     {
-        // TODO : format level name
-        //PhotonNetwork.Instantiate("Prefab/Level/Level_0_Terrain", Vector3.zero, Quaternion.identity, 0);
-        //PhotonNetwork.InstantiateSceneObject("Prefab/Level/Level_0_Terrain", Vector3.zero, Quaternion.identity, 0);
 
-        // create sun
-        //GameObject sun = PhotonNetwork.Instantiate("Prefab/Environment/Sun", new Vector3(250, 300, 250), Quaternion.identity, 0);
     }
-
 
     private void CreatePlayer()
     {
-        //Vector3[] pos = new Vector3[3] { new Vector3(200, 0, 200), new Vector3(250, 0, 250), new Vector3(225, 0, 225) };
+        // get level info
+        Level level = GameObject.FindGameObjectWithTag("Level").GetComponent<Level>();
 
-        GameObject player = PhotonNetwork.Instantiate("Prefab/player", new Vector2(0, 2), Quaternion.identity, 0) as GameObject;
+        Vector2 spawnPos = Vector2.zero;
+        if (PhotonNetwork.player.GetTeam() == PunTeams.Team.blue)
+            spawnPos = level.Team_1_Spawn_Point.position;
+        else
+            spawnPos = level.Team_2_Spawn_Point.position;
 
+        // create player as spawn point
+        GameObject player = PhotonNetwork.Instantiate("Prefab/player", spawnPos, Quaternion.identity, 0) as GameObject;
+
+        // set name/tag
         player.name = "LocalPlayer";
         player.tag = "LocalPlayer";
-
 
         // set camera follow
         FollowPlayer.instance.SetTarget(player.transform);

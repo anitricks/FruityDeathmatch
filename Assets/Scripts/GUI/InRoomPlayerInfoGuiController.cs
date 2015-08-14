@@ -3,28 +3,86 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class InRoomPlayerInfoGuiController : MonoBehaviour
+public class InRoomPlayerInfoGuiController : Photon.PunBehaviour
 {
-    List<Text> playerListText = new List<Text>();
+    public List<Text> teamBlueListText;
+    public List<Text> teamRedListText;
 
-    void Awake()
+    List<PhotonPlayer> teamBlue;
+    List<PhotonPlayer> teamRed;
+
+    void Start()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            playerListText.Add(transform.GetChild(i).GetComponent<Text>());
-        }
+        UpdateRoomPlayerList();
     }
 
-    void FixedUpdate()
+    void UpdateRoomPlayerList()
     {
-        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+        // reset
+        teamBlue = new List<PhotonPlayer>();
+        teamRed = new List<PhotonPlayer>();
+        foreach (var text in teamBlueListText)
         {
-            playerListText[i].text = PhotonNetwork.playerList[i].name;
+            text.color = Color.white;
+            text.text = "empty";
+        }
+        foreach (var text in teamRedListText)
+        {
+            text.color = Color.white;
+            text.text = "empty";
+        }
 
-            if (PhotonNetwork.playerList[i].isMasterClient)
-                playerListText[i].color = Color.red;
+        // get blue team player
+        foreach (var player in PhotonNetwork.playerList)
+        {
+            if (player.GetTeam() == PunTeams.Team.blue)
+                teamBlue.Add(player);
             else
-                playerListText[i].color = Color.white;
+                teamRed.Add(player);
+        }
+
+        // get red team player
+        for (int i = 0; i < teamBlue.Count; i++)
+        {
+            if (teamBlue[i].isMasterClient)
+                teamBlueListText[i].color = Color.red;
+            else
+                teamBlueListText[i].color = Color.white;
+
+            teamBlueListText[i].text = teamBlue[i].name;
+        }
+
+        for (int i = 0; i < teamRed.Count; i++)
+        {
+            if (teamRed[i].isMasterClient)
+                teamRedListText[i].color = Color.red;
+            else
+                teamRedListText[i].color = Color.white;
+
+            teamRedListText[i].text = teamRed[i].name;
         }
     }
+
+    public void SwitchTeam(int teamIndex)
+    {
+        if (teamIndex == 1)
+            PhotonNetwork.player.SetTeam(PunTeams.Team.blue);
+        else
+            PhotonNetwork.player.SetTeam(PunTeams.Team.red);
+
+        UpdateRoomPlayerList();
+    }
+
+    public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        UpdateRoomPlayerList();
+    }
+
+    public override void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
+    {
+        UpdateRoomPlayerList();
+    }
+    // TODO: update list when leave,join and more shitty situation
+
+
 }

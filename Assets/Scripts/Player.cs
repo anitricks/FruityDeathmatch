@@ -11,13 +11,14 @@ public class Player : Photon.MonoBehaviour
 
     void Start()
     {
-        InitStats();
         CreateStatsUI();
+        InitStats();
     }
 
     private void InitStats()
     {
         curHP = MAX_HP;
+        statsUIController.UpdateHpGui(curHP);
     }
 
     private void CreateStatsUI()
@@ -35,10 +36,40 @@ public class Player : Photon.MonoBehaviour
         curHP -= dmg;
 
         statsUIController.UpdateHpGui(curHP);
+
+        if (curHP <= 0 && photonView.isMine)
+            photonView.RPC("Die", PhotonTargets.All);
+    }
+
+    [PunRPC]
+    void Die()
+    {
+        // TODO: Death-Effect Stuff here
+
+        if (photonView.isMine)
+            photonView.RPC("Respawn", PhotonTargets.All);
+    }
+
+
+    [PunRPC]
+    void Respawn()
+    {
+        Vector2 spawnPos = Vector2.zero;
+        if (PhotonNetwork.player.GetTeam() == PunTeams.Team.blue)
+            spawnPos = Level.instance.Team_1_Spawn_Point.position;
+        else
+            spawnPos = Level.instance.Team_2_Spawn_Point.position;
+
+        transform.position = spawnPos;
+
+        // reset stats
+        InitStats();
+        // TODO: reset ammo and shit
     }
 
     void OnDestroy()
     {
-        Destroy(statsUIController.gameObject);
+        if (!photonView.isMine)
+            Destroy(statsUIController.gameObject);
     }
 }
