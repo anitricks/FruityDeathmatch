@@ -28,10 +28,12 @@ public class PlayerControl : MonoBehaviour
             if (!photonView.isMine)
             {
                 this.enabled = false;
+                GetComponent<PlayerShootingControl>().enabled = false;
                 GetComponent<PlayerNetworkControl>().enabled = true;
             }
             else
             {
+                GetComponent<PlayerShootingControl>().enabled = true;
                 GetComponent<PlayerNetworkControl>().enabled = false;
             }
         }
@@ -53,9 +55,19 @@ public class PlayerControl : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = new Vector2(move * moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
         if (move > 0 && !facingR)
-            Flip();
+        {
+            if (PhotonNetwork.offlineMode)
+                Flip();
+            else
+                photonView.RPC("Flip", PhotonTargets.All);
+        }
         else if (move < 0 && facingR)
-            Flip();
+        {
+            if (PhotonNetwork.offlineMode)
+                Flip();
+            else
+                photonView.RPC("Flip", PhotonTargets.All);
+        }
 
         anim.SetFloat("JumpSpeed", GetComponent<Rigidbody2D>().velocity.y);
     }
@@ -71,6 +83,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    [PunRPC]
     void Flip()
     {
         facingR = !facingR;

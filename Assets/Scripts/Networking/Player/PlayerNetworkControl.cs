@@ -5,6 +5,8 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
 {
     private Rigidbody2D body2d;
 
+    private bool facingR = true;
+
     // sync relavent
     private float lastSynchronizationTime = 0f;
     private float syncDelay = 0f;
@@ -12,9 +14,15 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
     private Vector3 syncStartPosition = Vector3.zero;
     private Vector3 syncEndPosition = Vector3.zero;
 
-    void Awake()
+    void OnEnable()
     {
         body2d = GetComponent<Rigidbody2D>();
+        body2d.isKinematic = true;
+    }
+
+    void OnDisable()
+    {
+        body2d.isKinematic = false;
     }
 
     void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -38,7 +46,7 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         SyncMovement();
     }
@@ -48,5 +56,6 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
         syncTime += Time.deltaTime;
         body2d.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
     }
+
 
 }

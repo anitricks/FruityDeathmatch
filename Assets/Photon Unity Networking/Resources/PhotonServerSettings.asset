@@ -37,4 +37,6 @@ MonoBehaviour:
   - PunRespawn
   - RequestForPickupTimes
   - TaggedPlayer
+  - Flip
+  - Shoot
   DisableAutoOpenWizard: 1
