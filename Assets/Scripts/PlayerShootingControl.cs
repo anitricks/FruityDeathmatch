@@ -30,6 +30,9 @@ public class PlayerShootingControl : Photon.MonoBehaviour
         if (Input.GetButtonDown("Fire1") && !reload && leftAmmo > 0)
         {
             anim.SetTrigger("Shoot");
+            if (!PhotonNetwork.offlineMode)
+                photonView.RPC("TriggerAnim", PhotonTargets.Others, "Shoot");
+
             shotsFired++;
 
             if (playerScript.facingR)
@@ -78,13 +81,24 @@ public class PlayerShootingControl : Photon.MonoBehaviour
 
     IEnumerator Reload()
     {
-
         anim.SetTrigger("Reload");
+        if (!PhotonNetwork.offlineMode)
+            photonView.RPC("TriggerAnim", PhotonTargets.Others, "Reload");
+
         reload = true;
         yield return new WaitForSeconds(1);
         reload = false;
         counter = 0;
         StopCoroutine("Reload");
     }
+
+    [PunRPC]
+    void TriggerAnim(string animName)
+    {
+        GetComponent<Animator>().SetTrigger(animName);
+    }
+
+
+
 
 }

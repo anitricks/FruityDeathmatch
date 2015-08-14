@@ -17,6 +17,10 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
     void OnEnable()
     {
         body2d = GetComponent<Rigidbody2D>();
+
+        body2d.fixedAngle = true;
+        body2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+        
         body2d.isKinematic = true;
     }
 

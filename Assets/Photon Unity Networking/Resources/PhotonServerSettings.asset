@@ -39,4 +39,7 @@ MonoBehaviour:
   - TaggedPlayer
   - Flip
   - Shoot
+  - TriggerAnim
+  - TriggerReloadAnim
+  - TriggerShootAnim
   DisableAutoOpenWizard: 1

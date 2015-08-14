@@ -52,7 +52,10 @@ public class Network : Photon.MonoBehaviour
 
             ConnectInUpdate = false;
             PhotonNetwork.ConnectUsingSettings(Version + "." + Application.loadedLevel);
-        }
+
+         }
+
+
 
         // generate a name for this player, if none is assigned yet
         /*if (String.IsNullOrEmpty(PhotonNetwork.playerName))

@@ -567,15 +567,15 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: JumpSpeed
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Shoot
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Reload
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
-  - SynchronizeType: 1
+  - SynchronizeType: 0
     LayerIndex: 1
 --- !u!114 &11457524
 MonoBehaviour:
@@ -948,10 +948,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_SynchronizeParameters.Array.data[4].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeLayers.Array.data[1].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
