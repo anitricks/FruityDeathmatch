@@ -42,4 +42,5 @@ MonoBehaviour:
   - TriggerAnim
   - TriggerReloadAnim
   - TriggerShootAnim
+  - ApplyDmg
   DisableAutoOpenWizard: 1

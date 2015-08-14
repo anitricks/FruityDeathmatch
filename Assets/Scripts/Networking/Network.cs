@@ -53,7 +53,7 @@ public class Network : Photon.MonoBehaviour
             ConnectInUpdate = false;
             PhotonNetwork.ConnectUsingSettings(Version + "." + Application.loadedLevel);
 
-         }
+        }
 
 
 
@@ -175,11 +175,11 @@ public class Network : Photon.MonoBehaviour
 
         GameObject player = PhotonNetwork.Instantiate("Prefab/player", new Vector2(0, 2), Quaternion.identity, 0) as GameObject;
 
-        //GameObject player = PhotonNetwork.Instantiate("Prefab/Player/Player", new Vector3(250, 0, 250), Quaternion.identity, 0) as GameObject;
+        player.name = "LocalPlayer";
+        player.tag = "LocalPlayer";
 
-        player.name = "localplayer";
-        player.tag = "Player";
 
+        // set camera follow
         FollowPlayer.instance.SetTarget(player.transform);
 
         Debug.Log("create player");

@@ -8,13 +8,6 @@ public class Bullet : Photon.PunBehaviour
     Rigidbody2D body2d;
 
 
-    // sync relavent
-    private float lastSynchronizationTime = 0f;
-    private float syncDelay = 0f;
-    private float syncTime = 0f;
-    private Vector3 syncStartPosition = Vector3.zero;
-    private Vector3 syncEndPosition = Vector3.zero;
-
     void Awake()
     {
         body2d = GetComponent<Rigidbody2D>();
@@ -30,8 +23,20 @@ public class Bullet : Photon.PunBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Dummy" && photonView.isMine)
+        if (photonView.isMine)
         {
+            // TODO: dmg only to differnet team members
+
+            string tag = other.tag;
+
+            if (tag == "Player")
+            {
+                Player player = other.GetComponent<Player>();
+
+                // TODO: dmg based on weapon
+                player.photonView.RPC("ApplyDmg", PhotonTargets.All, 10);
+            }
+
             Debug.Log("Hit");
             DestroyBullet();
         }

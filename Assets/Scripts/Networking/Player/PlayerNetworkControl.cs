@@ -5,8 +5,6 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
 {
     private Rigidbody2D body2d;
 
-    private bool facingR = true;
-
     // sync relavent
     private float lastSynchronizationTime = 0f;
     private float syncDelay = 0f;
@@ -20,7 +18,7 @@ public class PlayerNetworkControl : Photon.MonoBehaviour
 
         body2d.fixedAngle = true;
         body2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-        
+
         body2d.isKinematic = true;
     }
 
